@@ -1,0 +1,17 @@
+.infodiv {
+    display: none;
+    float: right;
+    z-index:20;
+    background:#FFFFFF;
+    border-radius:5px;
+    border:1px solid #444444;
+    padding:30px;
+    color:#444444;
+    font-size:14px;
+}
+
+.showinfo:hover + .infodiv {
+    display: block;
+    position:absolute;
+    right:50px;
+}

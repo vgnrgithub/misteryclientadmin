@@ -55,9 +55,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 //$route['default_controller'] = 'company/view';
 //$route['(:any)'] = 'company/view/$1';
-
+$route['agent/login'] = 'agent/login';
 $route['company/create'] = 'company/create';
 $route['company/(:any)'] = 'company/view/$1';
 $route['company'] = 'company';
 $route['(:any)'] = 'company/view/$1';
-$route['default_controller'] = 'company/index';
+$route['default_controller'] = 'agent/index';

@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: vicgnadal
- * Date: 24/10/16
- * Time: 12:06
- */
-
 class Company extends CI_Controller {
 
     public function __construct()
@@ -13,6 +6,7 @@ class Company extends CI_Controller {
         parent::__construct();
         $this->load->model('company_model');
         $this->load->helper('url_helper');
+        $this->load->library('session');
     }
 
     public function index()
@@ -40,12 +34,26 @@ class Company extends CI_Controller {
         $this->load->view('company/view', $data);
         $this->load->view('templates/footer');
     }
-    public function create()
+    public function listAudit($id = NULL)
+    {
+        $this->load->model('Audit_model', 'audit');
+
+        $data['agent'] = $_SESSION['agent_data_session'];
+        $data['audits'] = $this->audit->get_audits($id);
+        $data['companyid'] = $id;
+
+        $this->load->view('templates/headerlogin');
+        $this->load->view('company/audits',$data);
+        $this->load->view('templates/footerlogin');
+    }
+    public function create( $agent_id = FALSE )
     {
         $this->load->helper('form');
         $this->load->library('form_validation');
 
         $data['title'] = 'Create a new company';
+        $data['agent_id'] = $agent_id;
+        $data['agent'] = $_SESSION['agent_data_session'];
 
         $this->form_validation->set_rules('client', 'Name', 'required');
         $this->form_validation->set_rules('clientemail', 'Email', 'required');
@@ -53,15 +61,18 @@ class Company extends CI_Controller {
 
         if ($this->form_validation->run() === FALSE)
         {
-            $this->load->view('templates/header', $data);
-            $this->load->view('company/create');
-            $this->load->view('templates/footer');
+            $this->load->view('templates/headerlogin');
+            $this->load->view('company/create',$data);
+            $this->load->view('templates/footerlogin');
 
         }
         else
         {
             $this->company_model->set_company();
-            $this->load->view('company/success');
+            redirect(base_url('index.php/agent/login'));
+            $this->load->view('templates/headerlogin');
+            $this->load->view('agent/login');
+            $this->load->view('templates/footerlogin');
         }
     }
 }
